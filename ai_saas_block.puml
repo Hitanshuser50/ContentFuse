@@ -1,0 +1,89 @@
+@startuml
+skinparam handwritten true
+skinparam backgroundColor white
+
+rectangle "Frontend" as frontend {
+  rectangle "User Interface" as ui {
+    rectangle "Dashboard" as dashboard
+    rectangle "Generation Forms" as forms
+    rectangle "Content Viewer" as viewer
+  }
+  
+  rectangle "State Management" as state {
+    rectangle "User State" as userState
+    rectangle "Content State" as contentState
+  }
+}
+
+rectangle "Backend" as backend {
+  rectangle "API Layer" as api {
+    rectangle "REST API" as rest
+    rectangle "WebSocket" as ws
+  }
+  
+  rectangle "Services" as services {
+    rectangle "Auth Service" as auth
+    rectangle "Payment Service" as payment
+    rectangle "Storage Service" as storage
+  }
+  
+  rectangle "AI Generation" as ai {
+    rectangle "Video Generation" as video
+    rectangle "Music Generation" as music
+    rectangle "Code Generation" as code
+    rectangle "Image Generation" as image
+    rectangle "Conversation Generation" as conversation
+  }
+  
+  rectangle "Database" as db {
+    rectangle "User Data" as userData
+    rectangle "Content Data" as contentData
+    rectangle "Analytics Data" as analyticsData
+  }
+}
+
+rectangle "External Services" as external {
+  rectangle "AI Models" as models {
+    rectangle "Hugging Face" as hf
+    rectangle "OpenAI" as openai
+    rectangle "Stability AI" as stability
+  }
+  
+  rectangle "Payment Gateway" as paymentGateway
+  rectangle "Cloud Storage" as cloudStorage
+}
+
+frontend --> backend : HTTP/WebSocket
+backend --> external : API Calls
+
+ui --> state
+state --> api
+api --> services
+services --> ai
+services --> db
+ai --> models
+services --> paymentGateway
+services --> cloudStorage
+
+note right of frontend
+  Next.js frontend with
+  modern UI components
+end note
+
+note right of backend
+  Node.js backend with
+  Express and various
+  services
+end note
+
+note right of external
+  Third-party services
+  and AI models
+end note
+
+note right of ai
+  AI generation services
+  for different types of
+  content
+end note
+@enduml 

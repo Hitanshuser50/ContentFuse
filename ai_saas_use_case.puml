@@ -1,0 +1,101 @@
+@startuml
+left to right direction
+skinparam actorStyle awesome
+skinparam handwritten true
+
+actor User as user
+actor Admin as admin
+
+rectangle "AI-SaaS Platform" {
+  rectangle "Authentication" {
+    usecase "Sign Up" as UC1
+    usecase "Sign In" as UC2
+    usecase "Manage Profile" as UC3
+  }
+  
+  rectangle "Subscription" {
+    usecase "View Plans" as UC4
+    usecase "Subscribe" as UC5
+    usecase "Manage Subscription" as UC6
+  }
+  
+  rectangle "AI Generation" {
+    usecase "Generate Video" as UC7
+    usecase "Generate Music" as UC8
+    usecase "Generate Code" as UC9
+    usecase "Generate Image" as UC10
+    usecase "Generate Conversation" as UC11
+  }
+  
+  rectangle "Content Management" {
+    usecase "View History" as UC12
+    usecase "Download Content" as UC13
+    usecase "Delete Content" as UC14
+  }
+  
+  rectangle "Admin Features" {
+    usecase "Manage Users" as UC15
+    usecase "View Analytics" as UC16
+    usecase "Manage API Keys" as UC17
+  }
+}
+
+user --> UC1
+user --> UC2
+user --> UC3
+user --> UC4
+user --> UC5
+user --> UC6
+user --> UC7
+user --> UC8
+user --> UC9
+user --> UC10
+user --> UC11
+user --> UC12
+user --> UC13
+user --> UC14
+
+admin --> UC15
+admin --> UC16
+admin --> UC17
+
+note right of UC1
+  User registration with
+  email and password
+end note
+
+note right of UC4
+  View free and pro
+  subscription plans
+end note
+
+note right of UC7
+  Text-to-video generation
+  with memory management
+end note
+
+note right of UC8
+  AI music generation
+  with various styles
+end note
+
+note right of UC9
+  Code generation and
+  explanation
+end note
+
+note right of UC10
+  Image generation with
+  different models
+end note
+
+note right of UC11
+  AI conversation with
+  context awareness
+end note
+
+note right of UC15
+  User management and
+  content moderation
+end note
+@enduml 

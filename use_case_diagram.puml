@@ -1,0 +1,45 @@
+@startuml
+left to right direction
+skinparam actorStyle awesome
+skinparam handwritten true
+
+actor User as user
+rectangle "Text-to-Video Generation System" {
+  usecase "Generate Video" as UC1
+  usecase "Check System Memory" as UC2
+  usecase "Clear System Cache" as UC3
+  usecase "Handle Errors" as UC4
+  usecase "Save Video" as UC5
+}
+
+user --> UC1
+UC1 --> UC2
+UC1 --> UC3
+UC1 --> UC4
+UC1 --> UC5
+
+note right of UC1
+  User provides text prompt
+  System generates video
+end note
+
+note right of UC2
+  Checks available RAM
+  and virtual memory
+end note
+
+note right of UC3
+  Clears Python, PyTorch
+  and Hugging Face caches
+end note
+
+note right of UC4
+  Handles memory errors
+  and provides solutions
+end note
+
+note right of UC5
+  Exports video as MP4
+  with specified parameters
+end note
+@enduml 

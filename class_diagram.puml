@@ -1,0 +1,56 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam handwritten true
+
+class TextToVideoGenerator {
+  - device: str
+  - pipe: DiffusionPipeline
+  + check_memory(): float
+  + clear_cache(): void
+  + generate_video(prompt: str, output_path: str): void
+}
+
+class MemoryManager {
+  + check_memory(): float
+  + clear_cache(): void
+}
+
+class VideoGenerator {
+  - num_frames: int
+  - num_inference_steps: int
+  - width: int
+  - height: int
+  - fps: int
+  + generate_frames(prompt: str): List[Frame]
+  + export_video(frames: List[Frame], output_path: str): void
+}
+
+class ErrorHandler {
+  + handle_error(error: Exception): void
+  + suggest_solutions(error_type: str): void
+}
+
+TextToVideoGenerator --> MemoryManager
+TextToVideoGenerator --> VideoGenerator
+TextToVideoGenerator --> ErrorHandler
+
+note right of TextToVideoGenerator
+  Main class that orchestrates
+  the video generation process
+end note
+
+note right of MemoryManager
+  Handles memory monitoring
+  and cache clearing
+end note
+
+note right of VideoGenerator
+  Handles the actual video
+  generation and export
+end note
+
+note right of ErrorHandler
+  Manages error handling and
+  provides user solutions
+end note
+@enduml 

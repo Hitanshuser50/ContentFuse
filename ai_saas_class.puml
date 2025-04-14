@@ -1,0 +1,139 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam handwritten true
+
+package "Authentication" {
+  class User {
+    - id: string
+    - email: string
+    - password: string
+    - subscription: Subscription
+    + signUp(): void
+    + signIn(): void
+    + updateProfile(): void
+  }
+  
+  class AuthService {
+    + validateUser(): boolean
+    + generateToken(): string
+    + verifyToken(): boolean
+  }
+}
+
+package "Subscription" {
+  class Subscription {
+    - type: string
+    - status: string
+    - expiresAt: Date
+    + checkStatus(): boolean
+    + upgrade(): void
+    + cancel(): void
+  }
+  
+  class PaymentService {
+    + processPayment(): boolean
+    + handleWebhook(): void
+    + refund(): void
+  }
+}
+
+package "AI Generation" {
+  class VideoGenerator {
+    - model: string
+    - parameters: object
+    + generateVideo(): Video
+    + checkMemory(): void
+    + clearCache(): void
+  }
+  
+  class MusicGenerator {
+    - model: string
+    - style: string
+    + generateMusic(): Music
+    + setStyle(): void
+  }
+  
+  class CodeGenerator {
+    - model: string
+    - language: string
+    + generateCode(): Code
+    + explainCode(): string
+  }
+  
+  class ImageGenerator {
+    - model: string
+    - style: string
+    + generateImage(): Image
+    + setStyle(): void
+  }
+  
+  class ConversationGenerator {
+    - model: string
+    - context: array
+    + generateResponse(): string
+    + updateContext(): void
+  }
+}
+
+package "Content Management" {
+  class Content {
+    - id: string
+    - type: string
+    - url: string
+    - createdAt: Date
+    + download(): void
+    + delete(): void
+  }
+  
+  class History {
+    - userId: string
+    - content: array
+    + getHistory(): array
+    + clearHistory(): void
+  }
+}
+
+package "Admin" {
+  class Admin {
+    - id: string
+    - permissions: array
+    + manageUsers(): void
+    + viewAnalytics(): void
+    + manageAPIKeys(): void
+  }
+  
+  class Analytics {
+    - metrics: object
+    + generateReport(): object
+    + trackUsage(): void
+  }
+}
+
+User --> Subscription
+User --> Content
+User --> History
+Admin --> Analytics
+Admin --> User
+
+VideoGenerator ..> Content
+MusicGenerator ..> Content
+CodeGenerator ..> Content
+ImageGenerator ..> Content
+
+note right of User
+  Core user entity with
+  authentication and
+  subscription management
+end note
+
+note right of VideoGenerator
+  Handles text-to-video
+  generation with memory
+  management
+end note
+
+note right of Admin
+  Administrative features
+  for platform management
+end note
+@enduml 

@@ -1,0 +1,49 @@
+@startuml
+skinparam handwritten true
+skinparam backgroundColor white
+
+rectangle "User Input" as input {
+  rectangle "Text Prompt" as prompt
+}
+
+rectangle "Memory Management" as memory {
+  rectangle "Memory Check" as check
+  rectangle "Cache Clearing" as cache
+}
+
+rectangle "Video Generation" as video {
+  rectangle "Model Loading" as model
+  rectangle "Frame Generation" as frames
+  rectangle "Video Export" as export
+}
+
+rectangle "Error Handling" as error {
+  rectangle "Error Detection" as detect
+  rectangle "Solution Provider" as solution
+}
+
+input --> memory
+memory --> video
+video --> error
+error --> memory : if retry needed
+
+note right of input
+  Text prompt input
+  from user
+end note
+
+note right of memory
+  Manages system resources
+  and memory usage
+end note
+
+note right of video
+  Handles the core video
+  generation process
+end note
+
+note right of error
+  Provides error handling
+  and recovery solutions
+end note
+@enduml 
