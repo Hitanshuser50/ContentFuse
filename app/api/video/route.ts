@@ -4,10 +4,6 @@ import { NextResponse } from "next/server";
 import { checkApiLimit, increaseApiLimit } from "@/lib/api-limit";
 import { checkSubscription } from "@/lib/subscription";
 
-if (!process.env.PIKA_API_KEY) {
-  throw new Error("PIKA_API_KEY is not set");
-}
-
 export async function POST(req: Request) {
   try {
     const authResult = await auth();
@@ -18,10 +14,16 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { prompt } = body;
+    const { prompt, aspectRatio } = body;
 
     if (!prompt) {
       return new NextResponse("Prompt is required", { status: 400 });
+    }
+
+    const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "AIzaSyA-2DwiLBqiXu8eQ24oB97elJR8RhcrhlM";
+
+    if (!GEMINI_API_KEY) {
+      return new NextResponse("Gemini API Key is not set", { status: 500 });
     }
 
     const freeTrial = await checkApiLimit();
@@ -31,44 +33,58 @@ export async function POST(req: Request) {
       return new NextResponse("Free trial has expired. Please upgrade to pro.", { status: 403 });
     }
 
+    // Veo is a paid feature and requires a paid account
+    if (!isPro) {
+      return new NextResponse("Video generation requires a Pro subscription", { status: 403 });
+    }
+
+    // Initial request to start video generation operation
     const response = await fetch(
-      "https://api.pika.art/v1/generations",
+      `https://generativelanguage.googleapis.com/v1beta/models/veo-2.0-generate-001:generateVideos?key=${GEMINI_API_KEY}`,
       {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${process.env.PIKA_API_KEY}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           prompt: prompt,
-          model: "text-to-video",
-          width: 576,
-          height: 320,
-          fps: 8,
-          seed: Math.floor(Math.random() * 1000000)
+          config: {
+            personGeneration: "dont_allow", // Default to safer option
+            aspectRatio: aspectRatio || "16:9", // Default to 16:9 if not specified
+            numberOfVideos: 1,
+            enhancePrompt: true
+          }
         }),
       }
     );
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      console.error("Pika API Error:", {
+      console.error("Gemini Veo API Error:", {
         status: response.status,
         statusText: response.statusText,
         error: errorData
       });
       return new NextResponse(
-        `Video generation failed: ${response.statusText}`,
+        `Video generation failed: ${errorData.error?.message || response.statusText}`,
         { status: response.status }
       );
     }
 
-    if (!isPro) {
-      await increaseApiLimit();
+    // Get the operation details
+    const operationData = await response.json();
+    const operationName = operationData.name;
+
+    if (!operationName) {
+      return new NextResponse("Failed to start video generation", { status: 500 });
     }
 
-    const result = await response.json();
-    return NextResponse.json({ video: result.video_url });
+    // Return the operation name for client-side polling
+    return NextResponse.json({ 
+      operationName: operationName,
+      message: "Video generation started. This operation may take several minutes to complete."
+    });
+
   } catch (error) {
     console.error("Error generating video:", error);
     return new NextResponse(

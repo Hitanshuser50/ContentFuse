@@ -162,7 +162,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "F:\\ai-saas\\prisma\\client",
+      "value": "/workspaces/ContentFuse/prisma/client",
       "fromEnvVar": null
     },
     "config": {
@@ -171,17 +171,16 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "windows",
+        "value": "debian-openssl-1.1.x",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "F:\\ai-saas\\prisma\\schema.prisma",
+    "sourceFilePath": "/workspaces/ContentFuse/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../../.env",
-    "schemaEnvPath": "../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "..",
   "clientVersion": "6.6.0",
